@@ -25,6 +25,7 @@ contract TicketSale
     mapping (address => address) public swap;
     mapping (address => ticket) public tickets;
 
+
     function buyTicket(uint ticketID) public payable returns(ticket memory)
     {
         uint cost = ticketPrice;
@@ -42,10 +43,34 @@ contract TicketSale
         return(thisTicket);
     }
 
-
     function getTicketOf(address person) public view returns(uint)
     {      
         return tickets[person].ticketID;
+    }
+
+    function returnTicket(address payable returnAddress) public payable
+    {
+        address caller = msg.sender;
+        require(caller == manager, "UNAUTHORIZED ACTION");
+
+        require(tickets[returnAddress].ticketAddress == returnAddress, "The entered address does not own any tickets.");
+
+        uint refundAmount = (ticketPrice * 9) / 10;
+
+        (bool success,) = payable(manager).call{value: refundAmount}("");
+        require(success, "TRANSFER FAILURE");
+        
+
+        delete tickets[returnAddress];
+
+        ticketAmount += 1;
+    }
+
+    function changeOwner(address newOwner) public
+    {
+        address caller = msg.sender;
+
+        tickets[caller].ticketAddress = newOwner;
     }
 
     function offerSwap(address partner) public
@@ -81,31 +106,4 @@ contract TicketSale
 
         delete swap[caller];
     }
-
-    function changeOwner(address newOwner) public
-    {
-        address caller = msg.sender;
-
-        tickets[caller].ticketAddress = newOwner;
-    }              
-
-
-    function returnTicket(address payable returnAddress) public payable
-    {
-        address caller = msg.sender;
-        require(caller == manager, "UNAUTHORIZED ACTION");
-
-        require(tickets[returnAddress].ticketAddress == returnAddress, "The entered address does not own any tickets.");
-
-        uint refundAmount = (ticketPrice * 9) / 10;
-
-        (bool success,) = payable(manager).call{value: refundAmount}("");
-        require(success, "TRANSFER FAILURE");
-        
-
-        delete tickets[returnAddress];
-
-        ticketAmount += 1;
-    }
-
 }
