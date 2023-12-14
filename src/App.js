@@ -34,11 +34,15 @@ class App extends React.Component
       from: this.state.accounts[0],
       value: TicketSale.methods.ticketPrice().call()
     });
+    
+    alert("Purchased ticket " + this.state.ticketID);
   };
   
   onGet = async () =>
   {
-    await TicketSale.methods.getTicketOf(this.state.getAddress).call();
+    const ticketGot = await TicketSale.methods.getTicketOf(this.state.getAddress).call();
+
+    alert("User owns ticket " + ticketGot);
   }
 
   onReturn = async () =>
@@ -47,21 +51,29 @@ class App extends React.Component
       from: this.state.accounts[0],
       value: TicketSale.methods.ticketPrice().call()
     });
+
+    alert("Returned ticket " + this.state.ticketID);
   }
 
   onChangeOwner = async () =>
   {
     await TicketSale.methods.changeOwner(this.state.newOwnerAddress).call();
+
+    alert("Changed ticket owner");
   }
 
   onOffer = async () =>
   {
     await TicketSale.methods.offerSwap(this.state.offerAddress).call();
+
+    alert("Offer sent!");
   }
 
   onAccept = async () =>
   {
     await TicketSale.methods.acceptSwapOffer(this.state.acceptAddress).call();
+
+    alert("Offer accepted!");
   }
 
   render()
@@ -82,7 +94,8 @@ class App extends React.Component
               <h3>Buy Ticket</h3>
 
               <label>Ticket ID: </label>
-              <input value={this.state.ticketID} />
+              <input value={this.state.ticketID}
+                onChange={event => this.setState({ticketID: event.target.ticketID})} />
               <button onEnter={this.onPurchase}>Purchase</button>
             </div>
 
@@ -90,7 +103,8 @@ class App extends React.Component
               <h3>Get Ticket</h3>
 
               <label>From address: </label>
-              <input value={this.state.getAddress}/>
+              <input value={this.state.getAddress}
+                onChange={event => this.setState({getAddress: event.target.getAddress})} />
               <button onEnter={this.onGet}>Get</button>
             </div>
 
@@ -98,7 +112,8 @@ class App extends React.Component
               <h3>Return Ticket</h3>
 
               <label>To address: </label>
-              <input value={this.state.returnAddress}/>
+              <input value={this.state.returnAddress}
+                onChange={event => this.setState({returnAddress: event.target.returnAddress})} />
               <button onEnter={this.onReturn}>Return</button>
             </div>
 
@@ -106,7 +121,8 @@ class App extends React.Component
               <h3>Change Ticket Owner</h3>
 
               <label>Address of new owner: </label>
-              <input value={this.state.newOwnerAddress}/>
+              <input value={this.state.newOwnerAddress}
+                onChange={event => this.setState({newOwnerAddress: event.target.newOwnerAddress})} />
               <button onEnter={this.onChangeOwner}>Change</button>
             </div>
           </div>
@@ -120,7 +136,8 @@ class App extends React.Component
               <h3>Offer Swap</h3>
 
               <label>Send offer to address: </label>  
-              <input value={this.state.offerAddress}/>
+              <input value={this.state.offerAddress}
+                onChange={event => this.setState({offerAddress: event.target.offerAddress})} />
               <button onEnter={this.onOffer}>Send</button>
             </div>
             
@@ -128,7 +145,8 @@ class App extends React.Component
               <h3>Accept Offer</h3>
 
               <label>Accept from address: </label>  
-              <input value={this.state.acceptAddress}/>
+              <input value={this.state.acceptAddress}
+                onChange={event => this.setState({acceptAddress: event.target.acceptAddress})} />
               <button onEnter={this.onAccept}>Accept</button>
             </div>
           </div>
