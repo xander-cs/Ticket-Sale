@@ -10,7 +10,7 @@ function App()
       </header>
 
       <body>
-        <h1>test</h1>
+        <h1>Ticket Sale</h1>
       </body>
     </div>
   );
