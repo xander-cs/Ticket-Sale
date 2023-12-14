@@ -14,3 +14,14 @@ div
 {
   margin: 20px 5px;
 }
+
+label,input
+{
+  display: block;
+}
+
+button
+{
+  margin: 5px 0px;
+  padding: 7px;
+}
